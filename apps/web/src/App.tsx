@@ -45,7 +45,7 @@ function Landing({
     <main className="marketing-site">
       <header className="marketing-header">
         <a className="marketing-brand" href="#home" aria-label="Fleetline home">
-          <span className="brand-mark">F</span>
+          <img className="brand-mark" src="/images/fleetline-mark.svg" alt="" />
           <span>
             Fleetline<small>LOGISTICS</small>
           </span>
@@ -273,7 +273,7 @@ function Landing({
       </section>
       <footer className="marketing-footer">
         <a className="marketing-brand" href="#home">
-          <span className="brand-mark">F</span>
+          <img className="brand-mark" src="/images/fleetline-mark.svg" alt="" />
           <span>
             Fleetline<small>LOGISTICS</small>
           </span>
@@ -2051,7 +2051,7 @@ function Dashboard() {
     <main className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <span className="brand-mark">F</span>
+          <img className="brand-mark" src="/images/fleetline-mark.svg" alt="" />
           <span>
             Fleetline<small>LOGISTICS</small>
           </span>
@@ -2366,7 +2366,7 @@ function Login({
       </button>
       <form className="login-card" onSubmit={submit}>
         <div className="brand">
-          <span className="brand-mark">F</span>
+          <img className="brand-mark" src="/images/fleetline-mark.svg" alt="" />
           <span>
             Fleetline<small>LOGISTICS</small>
           </span>
