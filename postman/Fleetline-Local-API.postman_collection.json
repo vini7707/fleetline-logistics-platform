@@ -1,0 +1,200 @@
+{
+  "info": {
+    "name": "Fleetline Logistics — Local API",
+    "description": "Requests for the local development API. Set email/password in collection variables before Login. Login saves the access token for the protected requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:4000/api/v1"
+    },
+    {
+      "key": "email",
+      "value": "SET_DEMO_EMAIL"
+    },
+    {
+      "key": "password",
+      "value": "SET_DEMO_PASSWORD"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "shipmentId",
+      "value": ""
+    },
+    {
+      "key": "trackingCode",
+      "value": ""
+    },
+    {
+      "key": "trackingToken",
+      "value": ""
+    },
+    {
+      "key": "tripId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.accessToken) pm.collectionVariables.set('accessToken', body.accessToken);",
+              "if (body.user) console.log('Signed in as', body.user.email);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/login"
+      }
+    },
+    {
+      "name": "List shipments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/shipments"
+      }
+    },
+    {
+      "name": "Create shipment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.data?._id) pm.collectionVariables.set('shipmentId', body.data._id);",
+              "if (body.data?.trackingCode) pm.collectionVariables.set('trackingCode', body.data.trackingCode);",
+              "if (body.publicTrackingToken) pm.collectionVariables.set('trackingToken', body.publicTrackingToken);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pickup\": {\n    \"address\": \"Pune Warehouse\",\n    \"contactName\": \"Pickup Contact\",\n    \"contactPhone\": \"+91-9000000001\"\n  },\n  \"delivery\": {\n    \"address\": \"Mumbai Depot\",\n    \"contactName\": \"Delivery Contact\",\n    \"contactPhone\": \"+91-9000000002\"\n  },\n  \"goods\": [\n    {\n      \"description\": \"Boxed goods\",\n      \"quantity\": 4,\n      \"weightKg\": 20,\n      \"fragile\": false,\n      \"hazardous\": false\n    }\n  ]\n}"
+        },
+        "url": "{{baseUrl}}/shipments"
+      }
+    },
+    {
+      "name": "Public shipment tracking",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/shipments/public/{{trackingCode}}/{{trackingToken}}"
+      }
+    },
+    {
+      "name": "List drivers",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/drivers"
+      }
+    },
+    {
+      "name": "List vehicles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/vehicles"
+      }
+    },
+    {
+      "name": "List trips",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/trips"
+      }
+    },
+    {
+      "name": "Refresh access token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Origin",
+            "value": "http://127.0.0.1:5173"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/refresh"
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/logout"
+      }
+    }
+  ]
+}
